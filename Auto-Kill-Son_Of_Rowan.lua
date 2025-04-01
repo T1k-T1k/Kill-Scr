@@ -20,7 +20,7 @@ local notificationCooldowns = {
 
 local guiName = "Annouce"  -- Deleting announce Gui
 
-local gui = players:FindFirstChild("PlayerGui") and player.PlayerGui:FindFirstChild(guiName)
+local gui = player:FindFirstChild("PlayerGui") and player.PlayerGui:FindFirstChild(guiName)
 if gui then
     gui:Destroy()
 end
