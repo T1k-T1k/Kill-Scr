@@ -112,17 +112,21 @@ local function createGUI()
     local dragStart = nil
     local startPos = nil
     
-    local function update(input)
+   local function update(input)
         local delta = input.Position - dragStart
-        Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        Frame.Position = UDim2.new(
+            startPos.X.Scale, startPos.X.Offset + delta.X,
+            startPos.Y.Scale, startPos.Y.Offset + delta.Y
+        )
     end
     
+    -- ПК и мышь
     Frame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
             dragStart = input.Position
             startPos = Frame.Position
-            
+
             input.Changed:Connect(function()
                 if input.UserInputState == Enum.UserInputState.End then
                     dragging = false
@@ -130,19 +134,36 @@ local function createGUI()
             end)
         end
     end)
-    
+
     Frame.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement then
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
             dragInput = input
         end
     end)
-    
-    RunService.Heartbeat:Connect(function()
+
+    RunService.RenderStepped:Connect(function()
         if dragging and dragInput then
             update(dragInput)
         end
     end)
-    
+
+    -- Поддержка сенсорного экрана (мобильные устройства)
+    Frame.TouchBegan:Connect(function(input)
+        dragging = true
+        dragStart = input.Position
+        startPos = Frame.Position
+    end)
+
+    Frame.TouchMoved:Connect(function(input)
+        if dragging then
+            update(input)
+        end
+    end)
+
+    Frame.TouchEnded:Connect(function()
+        dragging = false
+    end)
+
     return ScreenGui
 end
 
