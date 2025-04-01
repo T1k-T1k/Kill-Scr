@@ -18,6 +18,13 @@ local notificationCooldowns = {
     success = 0
 }
 
+local guiName = "Annouce"  -- Deleting announce Gui
+
+local gui = players:FindFirstChild("PlayerGui") and player.PlayerGui:FindFirstChild(guiName)
+if gui then
+    gui:Destroy()
+end
+
 -- Updated HP threshold to 95 million
 local HP_THRESHOLD = 95000000
 
