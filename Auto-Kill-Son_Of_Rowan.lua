@@ -18,6 +18,12 @@ local notificationCooldowns = {
     success = 0
 }
 
+while not Players.LocalPlayer do
+    task.wait()
+end
+
+local player = Players.LocalPlayer
+
 -- Deleting announce Gui safely
 local guiName = "Annouce"
 
@@ -27,7 +33,6 @@ if player:FindFirstChild("PlayerGui") then
         gui:Destroy()
     end
 end
-
 -- Updated HP threshold to 95 million
 local HP_THRESHOLD = 95000000
 
